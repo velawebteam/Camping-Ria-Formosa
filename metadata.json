@@ -1,0 +1,6 @@
+{
+  "name": "Camping Ria Formosa",
+  "description": "Redesign profissional e moderno do website do Camping Ria Formosa em Cabanas de Tavira, Algarve.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
