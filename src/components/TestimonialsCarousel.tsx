@@ -1,5 +1,6 @@
-import { useRef } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useRef, useEffect } from 'react';
+import { ChevronLeft, ChevronRight, Quote } from 'lucide-react';
+import { motion } from 'motion/react';
 
 export default function TestimonialsCarousel() {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -29,7 +30,7 @@ export default function TestimonialsCarousel() {
     {
       name: 'Sophie Martin',
       role: 'Viajante em Autocaravana',
-      text: 'Camping calme, propre et très bien situé près de Cabanas de Tavira. Un vrai havre de paix pour découvrir l\'Algarve.',
+      text: 'Camping calme, propre et très bien situé près de Cabanas de Tavira. Un vrai havre de paix pour descobrir l\'Algarve.',
       rating: 5,
       source: 'Google Reviews'
     },
@@ -42,71 +43,111 @@ export default function TestimonialsCarousel() {
     }
   ];
 
+  // Triplicar para permitir loop infinito perfeito
+  const extendedTestimonials = [...testimonials, ...testimonials, ...testimonials];
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (el) {
+      const singleSetWidth = el.scrollWidth / 3;
+      el.scrollLeft = singleSetWidth;
+    }
+  }, []);
+
+  const handleInfiniteScroll = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const { scrollLeft, scrollWidth } = el;
+    const singleSetWidth = scrollWidth / 3;
+
+    if (scrollLeft <= 10) {
+      el.scrollLeft = singleSetWidth + scrollLeft;
+    } else if (scrollLeft >= singleSetWidth * 2 - 10) {
+      el.scrollLeft = scrollLeft - singleSetWidth;
+    }
+  };
+
   const scroll = (direction: 'left' | 'right') => {
-    if (scrollRef.current) {
-      const { scrollLeft, clientWidth } = scrollRef.current;
-      const scrollAmount = clientWidth > 768 ? 400 : 300;
-      scrollRef.current.scrollTo({
-        left: direction === 'left' ? scrollLeft - scrollAmount : scrollLeft + scrollAmount,
+    const el = scrollRef.current;
+    if (el) {
+      const scrollAmount = el.offsetWidth > 600 ? 450 : 350;
+      el.scrollTo({
+        left: direction === 'left' ? el.scrollLeft - scrollAmount : el.scrollLeft + scrollAmount,
         behavior: 'smooth'
       });
     }
   };
 
   return (
-    <section className="py-20 px-6 bg-branco-quente overflow-hidden">
+    <section className="py-32 px-6 bg-branco-quente overflow-hidden">
       <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="flex flex-col md:flex-row md:items-end justify-between mb-16"
+        >
           <div>
-            <h2 className="text-3xl font-serif mb-3 text-principal">O QUE DIZEM OS NOSSOS HÓSPEDES</h2>
-            <p className="text-texto-main/70 max-w-xl">Experiências reais partilhadas por quem nos visita e vive o melhor do Algarve connosco.</p>
+            <div className="inline-block px-4 py-1 bg-secundaria/10 rounded-full text-principal text-[10px] font-bold uppercase tracking-[0.2em] mb-4">
+              Feedback dos Hóspedes
+            </div>
+            <h2 className="text-4xl md:text-5xl font-serif text-principal leading-tight">O QUE DIZEM <br/><span className="text-secundaria italic">OS NOSSOS HÓSPEDES</span></h2>
           </div>
-          <div className="flex gap-3 mt-6 md:mt-0">
+          <div className="flex gap-4 mt-8 md:mt-0">
             <button 
               onClick={() => scroll('left')}
-              className="p-3 rounded-full bg-white border border-gray-200 text-principal hover:bg-principal hover:text-white transition shadow-sm"
+              className="p-4 rounded-full bg-white border border-gray-100 text-principal hover:bg-secundaria hover:border-secundaria transition-all duration-500 shadow-sm"
               aria-label="Anterior"
             >
-              <ChevronLeft className="w-5 h-5" />
+              <ChevronLeft className="w-6 h-6" />
             </button>
             <button 
               onClick={() => scroll('right')}
-              className="p-3 rounded-full bg-white border border-gray-200 text-principal hover:bg-principal hover:text-white transition shadow-sm"
+              className="p-4 rounded-full bg-white border border-gray-100 text-principal hover:bg-secundaria hover:border-secundaria transition-all duration-500 shadow-sm"
               aria-label="Seguinte"
             >
-              <ChevronRight className="w-5 h-5" />
+              <ChevronRight className="w-6 h-6" />
             </button>
           </div>
-        </div>
+        </motion.div>
 
         <div 
           ref={scrollRef}
-          className="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-none pb-6 -mx-6 px-6"
+          onScroll={handleInfiniteScroll}
+          className="flex gap-8 overflow-x-auto scrollbar-none pb-12 -mx-6 px-6 cursor-grab active:cursor-grabbing snap-x snap-mandatory"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
-          {testimonials.map((test, i) => (
-            <div 
+          {extendedTestimonials.map((test, i) => (
+            <motion.div 
               key={i} 
-              className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between min-w-[320px] md:min-w-[380px] max-w-[400px] shrink-0 snap-start"
+              whileHover={{ y: -10 }}
+              className="bg-white p-10 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.03)] border border-gray-50 flex flex-col justify-between min-w-[340px] md:min-w-[420px] max-w-[440px] shrink-0 transition-all duration-500 hover:shadow-[0_40px_80px_rgba(0,0,0,0.06)] snap-start"
             >
-              <div>
-                <div className="flex text-amber-500 mb-4">
+              <div className="relative">
+                <Quote className="absolute -top-4 -left-4 w-12 h-12 text-secundaria/10" />
+                <div className="flex text-secundaria mb-6 relative z-10">
                   {[...Array(test.rating)].map((_, idx) => (
                     <svg key={idx} className="w-5 h-5 fill-current" viewBox="0 0 20 20">
                       <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
                     </svg>
                   ))}
                 </div>
-                <p className="text-texto-main/80 italic mb-6">"{test.text}"</p>
+                <p className="text-texto-main/80 text-lg leading-relaxed font-light mb-8 relative z-10">"{test.text}"</p>
               </div>
-              <div className="border-t border-gray-100 pt-4 flex justify-between items-center">
-                <div>
-                  <h4 className="font-serif font-bold text-principal">{test.name}</h4>
-                  <p className="text-xs text-texto-main/60">{test.role}</p>
+              <div className="pt-8 border-t border-gray-50 flex justify-between items-center">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-principal/5 rounded-full flex items-center justify-center font-serif font-bold text-principal text-xl uppercase">
+                    {test.name.charAt(0)}
+                  </div>
+                  <div>
+                    <h4 className="font-serif font-bold text-principal text-lg">{test.name}</h4>
+                    <p className="text-[10px] uppercase tracking-widest text-texto-main/40 font-bold">{test.role}</p>
+                  </div>
                 </div>
-                <span className="text-xs px-2.5 py-1 bg-gray-100 rounded-full text-gray-600 font-medium">{test.source}</span>
+                <span className="text-[9px] px-3 py-1 bg-branco-quente rounded-full text-texto-main/60 font-black uppercase tracking-widest">{test.source}</span>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
