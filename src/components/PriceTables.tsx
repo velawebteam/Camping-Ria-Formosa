@@ -27,100 +27,89 @@ export default function PriceTables() {
   ];
 
   return (
-    <div className="py-32 px-6 bg-white">
+    <div className="py-12 md:py-20 px-4 sm:px-6 md:px-10 bg-white">
       <div className="max-w-6xl mx-auto">
-        <motion.div {...fadeInUp} className="text-center mb-20">
-          <h2 className="text-4xl md:text-5xl font-serif text-principal mb-4 uppercase tracking-tight">TABELAS DE PREÇOS</h2>
-          <div className="w-20 h-1 bg-secundaria mx-auto rounded-full" />
+        <motion.div {...fadeInUp} className="mb-8 md:mb-12 pb-6 md:pb-8 border-b border-principal/10 flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-principal/50 mb-2">
+              03. Tarifário Oficial
+            </p>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif text-principal">Tabelas de Preços 2026/27</h2>
+          </div>
+          <p className="text-xs text-texto-main/60">
+            Valores diários com IVA incluído à taxa de 6%.
+          </p>
         </motion.div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
           <div className="lg:col-span-8">
-            <motion.h3 {...fadeInUp} className="text-2xl font-serif font-bold mb-8 text-principal flex items-center gap-4">
-              <span className="w-8 h-8 bg-secundaria/10 rounded-lg flex items-center justify-center text-secundaria text-sm">01</span>
-              Camping Geral 2026/27
-            </motion.h3>
-            <motion.div 
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="overflow-x-auto rounded-2xl shadow-2xl border border-gray-100"
-            >
-              <table className="w-full text-left border-collapse bg-white">
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-5 md:mb-6">
+              <h3 className="text-lg sm:text-xl font-serif font-bold text-principal flex items-center gap-3">
+                <span className="text-sm font-sans font-bold text-secundaria tabular-nums">01.</span>
+                Camping Geral 2026/27
+              </h3>
+              <span className="sm:hidden text-[10px] font-semibold uppercase tracking-wider text-principal/45">
+                Deslize para ver épocas →
+              </span>
+            </div>
+            <div className="overflow-x-auto rounded-2xl border border-principal/10">
+              <table className="w-full min-w-[540px] text-left border-collapse bg-white">
                 <thead>
                   <tr className="bg-principal text-white">
-                    <th className="p-6 text-[10px] uppercase tracking-widest font-black">Modalidade</th>
-                    <th className="p-6 text-[10px] uppercase tracking-widest font-black">16/09 a 14/06</th>
-                    <th className="p-6 text-[10px] uppercase tracking-widest font-black">15/06-31/07 & 01/09-15/09</th>
-                    <th className="p-6 text-[10px] uppercase tracking-widest font-black">01/08 a 31/08</th>
+                    <th className="p-3.5 sm:p-4 md:p-5 text-[11px] uppercase tracking-wider font-bold">Modalidade</th>
+                    <th className="p-3.5 sm:p-4 md:p-5 text-[11px] uppercase tracking-wider font-bold tabular-nums">16/09 a 14/06</th>
+                    <th className="p-3.5 sm:p-4 md:p-5 text-[11px] uppercase tracking-wider font-bold tabular-nums">15/06–31/07 &amp; 01/09–15/09</th>
+                    <th className="p-3.5 sm:p-4 md:p-5 text-[11px] uppercase tracking-wider font-bold tabular-nums">01/08 a 31/08</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-50">
+                <tbody className="divide-y divide-principal/10">
                   {generalPrices.map((row, i) => (
-                    <motion.tr 
+                    <tr 
                       key={i} 
-                      initial={{ opacity: 0 }}
-                      whileInView={{ opacity: 1 }}
-                      transition={{ delay: i * 0.05 }}
-                      className="hover:bg-branco-quente transition-colors group"
+                      className="hover:bg-branco-quente transition-colors"
                     >
-                      <td className="p-6 font-bold text-principal group-hover:text-secundaria transition-colors">{row.name}</td>
-                      <td className="p-6 text-texto-main/70">{row.p1}</td>
-                      <td className="p-6 text-texto-main/70">{row.p2}</td>
-                      <td className="p-6 text-texto-main/70">{row.p3}</td>
-                    </motion.tr>
+                      <td className="p-3.5 sm:p-4 md:p-5 font-semibold text-xs sm:text-sm text-principal">{row.name}</td>
+                      <td className="p-3.5 sm:p-4 md:p-5 text-xs sm:text-sm text-texto-main/75 tabular-nums">{row.p1}</td>
+                      <td className="p-3.5 sm:p-4 md:p-5 text-xs sm:text-sm text-texto-main/75 tabular-nums">{row.p2}</td>
+                      <td className="p-3.5 sm:p-4 md:p-5 text-xs sm:text-sm text-texto-main/75 font-medium tabular-nums">{row.p3}</td>
+                    </tr>
                   ))}
                 </tbody>
               </table>
-            </motion.div>
-            <motion.div {...fadeInUp} className="mt-8 space-y-2">
-              <p className="text-xs text-texto-main/40 flex items-center gap-2">
-                <span className="w-1 h-1 bg-secundaria rounded-full" />
-                10% de desconto com a apresentação do Camping International Card no check-in.
-              </p>
-              <p className="text-xs text-texto-main/40 flex items-center gap-2">
-                <span className="w-1 h-1 bg-secundaria rounded-full" />
-                IVA incluído à taxa de 6%.
-              </p>
-            </motion.div>
+            </div>
+            <div className="mt-5 sm:mt-6 space-y-1.5 text-xs text-texto-main/60 font-light">
+              <p>• 10% de desconto com a apresentação do Camping International Card no check-in.</p>
+              <p>• IVA incluído à taxa legal de 6%.</p>
+            </div>
           </div>
 
           <div className="lg:col-span-4">
-            <motion.h3 {...fadeInUp} className="text-2xl font-serif font-bold mb-8 text-principal flex items-center gap-4">
-              <span className="w-8 h-8 bg-secundaria/10 rounded-lg flex items-center justify-center text-secundaria text-sm">02</span>
+            <h3 className="text-xl font-serif font-bold mb-6 text-principal flex items-center gap-3">
+              <span className="text-sm font-sans font-bold text-secundaria tabular-nums">02.</span>
               Promoção Inverno
-            </motion.h3>
-            <motion.div 
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="space-y-4"
-            >
-              <div className="bg-principal text-white p-8 rounded-2xl mb-6 shadow-xl relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-2xl -mr-16 -mt-16" />
-                <p className="text-[10px] uppercase tracking-[0.3em] font-black mb-2 opacity-60">Período</p>
-                <p className="text-xl font-serif font-bold text-secundaria">01/10 a 31/05</p>
+            </h3>
+            <div className="space-y-3">
+              <div className="bg-principal text-white p-6 rounded-2xl mb-4">
+                <p className="text-[10px] uppercase tracking-[0.22em] font-bold mb-1 text-white/65">Período Promocional</p>
+                <p className="text-xl font-serif font-bold text-secundaria tabular-nums">01/10 a 31/05</p>
               </div>
               
               {winterPrices.map((item, i) => (
-                <motion.div 
+                <div 
                   key={i} 
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                  className="flex justify-between items-center p-6 border border-gray-100 rounded-2xl bg-white hover:border-secundaria/30 hover:shadow-lg transition-all duration-500 group cursor-default"
+                  className="flex justify-between items-center p-4 border border-principal/10 rounded-2xl bg-branco-quente/60 hover:border-secundaria/60 transition-colors"
                 >
-                  <span className="font-bold text-principal group-hover:text-secundaria transition-colors text-sm uppercase tracking-wide">{item.name}</span>
-                  <div className="text-right">
-                    <span className="text-lg font-serif font-bold text-principal">{item.price}</span>
-                    <span className="text-[10px] text-texto-main/40 block font-bold uppercase tracking-tighter">/ MÊS</span>
+                  <span className="font-semibold text-principal text-xs uppercase tracking-wide">{item.name}</span>
+                  <div className="text-right tabular-nums">
+                    <span className="text-base font-serif font-bold text-principal">{item.price}</span>
+                    <span className="text-[10px] text-texto-main/50 ml-1 font-semibold uppercase">/ mês</span>
                   </div>
-                </motion.div>
+                </div>
               ))}
-            </motion.div>
-            <motion.p {...fadeInUp} className="mt-8 text-xs text-texto-main/40 italic leading-relaxed">
-              * Mínimo 1 Mês. Taxa fixa inclui até 2 Adultos, Alvéolo, Eletricidade e 1 Animal de estimação.
-            </motion.p>
+            </div>
+            <p className="mt-6 text-xs text-texto-main/55 font-light leading-relaxed">
+              * Mínimo 1 mês. Taxa fixa inclui até 2 adultos, alvéolo, eletricidade e 1 animal de estimação.
+            </p>
           </div>
         </div>
       </div>

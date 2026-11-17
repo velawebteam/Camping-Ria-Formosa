@@ -1,139 +1,170 @@
 import { motion } from 'motion/react';
+import { Phone, Mail, Clock, Compass } from 'lucide-react';
 import ContactForm from '../components/ContactForm';
 
 const fadeInUp = {
-  initial: { opacity: 0, y: 30 },
+  initial: { opacity: 0, y: 24 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true },
-  transition: { duration: 0.8 }
-};
-
-const staggerContainer = {
-  initial: {},
-  whileInView: {
-    transition: {
-      staggerChildren: 0.1
-    }
-  }
+  transition: { duration: 0.7 },
 };
 
 export default function ContactsPage() {
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      className="pt-40 pb-32 px-6 bg-branco-quente min-h-screen"
+      className="pt-28 sm:pt-32 lg:pt-36 pb-20 md:pb-28 px-4 sm:px-6 bg-branco-quente min-h-screen"
     >
       <div className="max-w-6xl mx-auto">
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          className="text-center mb-20"
-        >
-          <motion.h1 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="text-4xl md:text-6xl font-serif mb-6 text-principal uppercase tracking-tight"
+        {/* Centered Header */}
+        <div className="text-center mb-12 md:mb-16 max-w-2xl mx-auto">
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-xs font-bold uppercase tracking-[0.25em] text-secundaria mb-3"
           >
-            CONTACTE-NOS
+            Localização &amp; Apoio
+          </motion.p>
+          <motion.h1
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-4xl sm:text-5xl md:text-7xl font-serif text-principal mb-4 sm:mb-6 uppercase tracking-tight"
+          >
+            Contactos
           </motion.h1>
-          <motion.div 
-            initial={{ width: 0 }}
-            whileInView={{ width: 80 }}
-            transition={{ duration: 1, delay: 0.5 }}
-            className="h-1 bg-secundaria mx-auto rounded-full mb-8" 
-          />
-          <p className="text-xl text-texto-main/60 max-w-2xl mx-auto font-light">Estamos aqui para ajudar a planear as suas férias perfeitas. Fale connosco.</p>
-        </motion.div>
-
-        <div className="max-w-5xl mx-auto space-y-16">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1 }}
-            className="bg-white p-10 md:p-12 rounded-3xl shadow-2xl border border-gray-100 relative overflow-hidden"
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-base sm:text-lg text-texto-main/70 font-light leading-relaxed"
           >
-            <div className="absolute top-0 right-0 w-32 h-32 bg-secundaria/5 rounded-full blur-3xl -mr-16 -mt-16" />
-            <h2 className="text-3xl font-serif font-bold mb-12 text-principal text-center relative">Informações de Contacto</h2>
-            
-            <motion.div variants={staggerContainer} initial="initial" whileInView="whileInView" viewport={{ once: true }} className="grid grid-cols-1 md:grid-cols-3 gap-12 relative mb-12">
-              {[
-                {
-                  icon: <svg className="w-5 h-5 text-principal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>,
-                  label: "Morada",
-                  content: "Quinta da Gomeira\n8800-058 Cabanas de Tavira\nAlgarve, Portugal"
-                },
-                {
-                  icon: <svg className="w-5 h-5 text-principal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 011.94.553L9.58 8.41a1 1 0 01-.47 1.18L7.68 10.43a11.005 11.005 0 005.02 5.02l1.09-1.31a1 1 0 011.18-.47l2.27.44a1 1 0 01.554.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>,
-                  label: "Telefone",
-                  content: "+351 281 328 887"
-                },
-                {
-                  icon: <svg className="w-5 h-5 text-principal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>,
-                  label: "E-mail",
-                  content: "info@campingriaformosa.com"
-                }
-              ].map((item, i) => (
-                <motion.div key={i} variants={fadeInUp} className="flex flex-col items-center text-center group">
-                  <div className="w-14 h-14 bg-secundaria/10 rounded-2xl flex items-center justify-center shrink-0 group-hover:bg-secundaria/20 transition-all duration-500 mb-6 transform group-hover:scale-110">
-                    {item.icon}
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-principal mb-3 uppercase tracking-widest text-[10px] opacity-40">{item.label}</h4>
-                    <p className="text-texto-main/70 font-light leading-relaxed whitespace-pre-line group-hover:text-principal transition-colors duration-500 text-sm">
-                      {item.content}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="pt-10 border-t border-gray-50 text-center"
-            >
-                <h4 className="font-bold text-principal mb-4 uppercase tracking-widest text-[10px] opacity-40 text-center">Coordenadas GPS</h4>
-                <div className="bg-branco-quente px-8 py-4 rounded-2xl text-xs font-mono text-principal/60 group hover:text-principal transition-all duration-500 inline-block border border-gray-100 shadow-sm group-hover:shadow-md">
-                  Lat: 37º 08’ 42.24 N | Lon: 07º 36’ 08.03 W
-                </div>
-            </motion.div>
-          </motion.div>
-
-          <motion.div 
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1 }}
-            className="max-w-3xl mx-auto space-y-16"
-          >
-            <motion.div 
-              whileHover={{ scale: 1.01 }}
-              className="bg-white p-2 rounded-3xl shadow-2xl border border-gray-100 overflow-hidden h-96 relative group"
-            >
-              <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3180.351306603321!2d-7.60361772371803!3d37.14434534822408!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd101ca61f785e41%3A0xd66f79b66143e8ce!2sParque%20de%20Campismo%20Ria%20Formosa!5e0!3m2!1spt-PT!2spt!4v1793984564399!5m2!1spt-PT!2spt" 
-                width="100%" 
-                height="100%" 
-                style={{border:0}} 
-                allowFullScreen={true} 
-                loading="lazy" 
-                className="rounded-2xl grayscale group-hover:grayscale-0 transition-all duration-1000"
-                referrerPolicy="strict-origin-when-cross-origin">
-              </iframe>
-            </motion.div>
-            
-            <div className="bg-white p-10 md:p-12 rounded-3xl shadow-2xl border border-gray-100">
-              <h2 className="text-3xl font-serif font-bold mb-10 text-principal text-center">Envie-nos uma Mensagem</h2>
-              <ContactForm />
-            </div>
-          </motion.div>
+            Estamos à sua inteira disposição para esclarecer qualquer dúvida sobre a sua estadia,
+            instalações ou acesso ao parque.
+          </motion.p>
         </div>
+
+        {/* 1. Horizontal Contact Details Card (Telefone, Email, Horário, Coordenadas) */}
+        <motion.section
+          {...fadeInUp}
+          className="bg-white rounded-3xl md:rounded-[2.5rem] shadow-xl border border-gray-100 p-6 sm:p-8 lg:p-10 mb-10 md:mb-14"
+        >
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-0 lg:divide-x lg:divide-principal/10">
+            {/* Telefone */}
+            <div className="flex items-start gap-4 lg:pr-6">
+              <div className="w-11 h-11 rounded-2xl bg-branco-quente text-principal flex items-center justify-center shrink-0">
+                <Phone className="w-5 h-5 text-secundaria" />
+              </div>
+              <div className="min-w-0">
+                <h2 className="text-xs font-bold uppercase tracking-widest text-principal/45 mb-1">
+                  Telefone
+                </h2>
+                <a
+                  href="tel:+351281328887"
+                  className="inline-flex items-center min-h-[44px] text-lg font-serif font-bold text-principal hover:text-secundaria transition-colors tabular-nums whitespace-nowrap"
+                >
+                  +351 281 328 887
+                </a>
+                <p className="text-xs text-texto-main/55 font-light">Receção e apoio diário</p>
+              </div>
+            </div>
+
+            {/* E-mail */}
+            <div className="flex items-start gap-4 lg:px-6">
+              <div className="w-11 h-11 rounded-2xl bg-branco-quente text-principal flex items-center justify-center shrink-0">
+                <Mail className="w-5 h-5 text-secundaria" />
+              </div>
+              <div className="min-w-0">
+                <h2 className="text-xs font-bold uppercase tracking-widest text-principal/45 mb-1">
+                  E-mail
+                </h2>
+                <a
+                  href="mailto:info@campingriaformosa.com"
+                  className="inline-flex items-center min-h-[44px] text-sm font-semibold text-principal hover:text-secundaria transition-colors break-all"
+                >
+                  info@campingriaformosa.com
+                </a>
+                <p className="text-xs text-texto-main/55 font-light">Resposta direta</p>
+              </div>
+            </div>
+
+            {/* Horário */}
+            <div className="flex items-start gap-4 lg:px-6">
+              <div className="w-11 h-11 rounded-2xl bg-branco-quente text-principal flex items-center justify-center shrink-0">
+                <Clock className="w-5 h-5 text-secundaria" />
+              </div>
+              <div className="min-w-0">
+                <h2 className="text-xs font-bold uppercase tracking-widest text-principal/45 mb-2">
+                  Horário da Receção
+                </h2>
+                <p className="text-xs sm:text-sm text-texto-main/75 leading-relaxed tabular-nums">
+                  <strong className="text-principal">Verão:</strong> 08h00 – 19h00
+                  <br />
+                  <strong className="text-principal">Inverno:</strong> 08h00 – 13h00 · 14h00 –
+                  19h00
+                </p>
+                <p className="text-xs text-texto-main/50 mt-1">Viaturas: 08h00 – 00h00</p>
+              </div>
+            </div>
+
+            {/* Coordenadas */}
+            <div className="flex items-start gap-4 lg:pl-6">
+              <div className="w-11 h-11 rounded-2xl bg-principal text-secundaria flex items-center justify-center shrink-0">
+                <Compass className="w-5 h-5" />
+              </div>
+              <div className="min-w-0">
+                <h2 className="text-xs font-bold uppercase tracking-widest text-principal/45 mb-2">
+                  Coordenadas GPS
+                </h2>
+                <p className="font-mono text-xs text-principal font-semibold leading-relaxed tabular-nums">
+                  37º 08’ 42.24” N
+                  <br />
+                  07º 36’ 08.03” W
+                </p>
+                <p className="text-xs text-texto-main/55 font-light mt-1">
+                  Quinta da Gomeira · Cabanas de Tavira
+                </p>
+              </div>
+            </div>
+          </div>
+        </motion.section>
+
+        {/* 2. Full-Width Map */}
+        <motion.section
+          {...fadeInUp}
+          className="bg-white p-2.5 sm:p-4 rounded-3xl md:rounded-[2.5rem] shadow-2xl border border-gray-100 overflow-hidden mb-12 md:mb-16"
+        >
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3180.351306603321!2d-7.60361772371803!3d37.14434534822408!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd101ca61f785e41%3A0xd66f79b66143e8ce!2sParque%20de%20Campismo%20Ria%20Formosa!5e0!3m2!1spt-PT!2spt!4v1793984564399!5m2!1spt-PT!2spt"
+            width="100%"
+            height="440"
+            style={{ border: 0 }}
+            allowFullScreen={true}
+            loading="lazy"
+            title="Localização do Camping Ria Formosa em Cabanas de Tavira"
+            className="rounded-2xl md:rounded-[1.8rem] w-full h-[320px] sm:h-[440px]"
+            referrerPolicy="strict-origin-when-cross-origin"
+          />
+        </motion.section>
+
+        {/* 3. Centered Contact Form */}
+        <motion.section
+          {...fadeInUp}
+          className="max-w-3xl mx-auto bg-white p-6 sm:p-10 md:p-12 rounded-3xl md:rounded-[2.5rem] shadow-2xl border border-gray-100"
+        >
+          <div className="text-center mb-8 sm:mb-10">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-secundaria mb-2">
+              Envie-nos uma Mensagem
+            </p>
+            <h2 className="text-2xl sm:text-3xl font-serif text-principal font-bold">
+              Tem alguma questão?
+            </h2>
+          </div>
+          <ContactForm />
+        </motion.section>
       </div>
     </motion.div>
   );

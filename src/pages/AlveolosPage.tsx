@@ -1,183 +1,351 @@
+import { useState } from 'react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
-import { Tent, Zap, TreePine, Map, Ruler, Info, Check } from 'lucide-react';
+import {
+  Tent,
+  Zap,
+  TreePine,
+  Map,
+  Ruler,
+  Info,
+  Check,
+  ArrowRight,
+  Droplets,
+  Wifi,
+} from 'lucide-react';
 import PriceTables from '../components/PriceTables';
 
 const fadeInUp = {
-  initial: { opacity: 0, y: 30 },
+  initial: { opacity: 0, y: 24 },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true },
-  transition: { duration: 0.8 }
+  viewport: { once: true, margin: '-80px' },
+  transition: { duration: 0.7 },
+};
+
+type PlotTierKey = 'pequeno' | 'grande' | 'xl';
+
+const PLOT_TIERS: Record<
+  PlotTierKey,
+  {
+    key: PlotTierKey;
+    title: string;
+    area: string;
+    idealFor: string;
+    totalCount: string;
+    rates: { label: string; price: string }[];
+    highlights: string[];
+  }
+> = {
+  pequeno: {
+    key: 'pequeno',
+    title: 'Alvéolo Pequeno',
+    area: 'Até 35 m² (ex. 5m × 5m)',
+    idealFor: 'Tendas individuais ou familiares, carro + tenda e carrinhas camper.',
+    totalCount: '150 alvéolos (Setor Norte e Sul)',
+    rates: [
+      { label: 'Época Baixa (16/09 – 14/06)', price: '€8,80 / noite' },
+      { label: 'Época Média (15/06 – 31/07 · 01/09 – 15/09)', price: '€11,00 / noite' },
+      { label: 'Época Alta (01/08 – 31/08)', price: '€12,10 / noite' },
+    ],
+    highlights: [
+      'Espaço identificado individualmente',
+      'Ligação elétrica 16A opcional (+€5,50/noite)',
+      'Sombra natural ou toldo',
+      'Proximidade aos blocos sanitários e piscinas',
+    ],
+  },
+  grande: {
+    key: 'grande',
+    title: 'Alvéolo Grande',
+    area: 'Até 90 m²',
+    idealFor: 'Caravanas, autocaravanas médias ou tendas familiares amplas com toldo.',
+    totalCount: '120 alvéolos (Setor Sul e Nascente)',
+    rates: [
+      { label: 'Época Baixa (16/09 – 14/06)', price: '€17,00 / noite' },
+      { label: 'Época Média (15/06 – 31/07 · 01/09 – 15/09)', price: '€20,40 / noite' },
+      { label: 'Época Alta (01/08 – 31/08)', price: '€22,50 / noite' },
+    ],
+    highlights: [
+      'Fácil manobra para caravanas e autocaravanas',
+      'Ligação elétrica 16A disponível',
+      'Espaço cómodo para mobiliário exterior',
+      'Elegível para Promoção de Inverno (€500/mês)',
+    ],
+  },
+  xl: {
+    key: 'xl',
+    title: 'Alvéolo XL',
+    area: 'Mais de 90 m²',
+    idealFor: 'Autocaravanas de grande porte, veículos com reboque ou estadias prolongadas.',
+    totalCount: '80 alvéolos (Setor Nascente)',
+    rates: [
+      { label: 'Época Baixa (16/09 – 14/06)', price: '€26,40 / noite' },
+      { label: 'Época Média (15/06 – 31/07 · 01/09 – 15/09)', price: '€33,00 / noite' },
+      { label: 'Época Alta (01/08 – 31/08)', price: '€36,30 / noite' },
+    ],
+    highlights: [
+      'A nossa tipologia de parcela mais ampla',
+      'Acesso desimpedido para grandes viaturas',
+      'Ligação elétrica 16A dedicada',
+      'Elegível para Promoção de Inverno (€575/mês)',
+    ],
+  },
 };
 
 export default function AlveolosPage() {
-  const highlights = [
-    { 
-      icon: <Ruler className="w-6 h-6" />, 
-      title: 'Dimensão', 
-      text: 'Espaços amplos de 5m x 5m (25m²).' 
-    },
-    { 
-      icon: <Tent className="w-6 h-6" />, 
-      title: 'Camping Livre', 
-      text: 'Ideal para tendas, autocaravanas ou mobile homes.' 
-    },
-    { 
-      icon: <TreePine className="w-6 h-6" />, 
-      title: 'Sombra Natural', 
-      text: 'Áreas arborizadas e toldos para seu conforto.' 
-    },
-    { 
-      icon: <Zap className="w-6 h-6" />, 
-      title: 'Eletricidade', 
-      text: 'Pontos de luz disponíveis (mediante taxa extra).' 
-    },
-    { 
-      icon: <Map className="w-6 h-6" />, 
-      title: 'Organização', 
-      text: '8 ruas organizadas com 10 alvéolos cada.' 
-    },
-  ];
+  const [selectedTier, setSelectedTier] = useState<PlotTierKey>('grande');
+  const activeTier = PLOT_TIERS[selectedTier];
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.4 }}
       className="bg-branco-quente min-h-screen"
     >
       {/* Hero Section */}
-      <section className="relative h-[60vh] flex items-center justify-center overflow-hidden">
-        <img 
-          src="/assets/entrada.jpg" 
-          alt="Alvéolos Ria Formosa" 
+      <section className="relative min-h-[60vh] md:min-h-[65vh] flex items-end pb-14 md:pb-20 pt-28 md:pt-36 px-4 sm:px-6 overflow-hidden">
+        <img
+          src="/assets/entrada.jpg"
+          alt="Área de Alvéolos do Camping Ria Formosa"
           className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-principal/60 backdrop-blur-[2px]" />
-        <div className="relative z-10 text-center px-6">
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-5xl md:text-7xl font-serif text-white mb-6 uppercase tracking-tight"
-          >
-            Alvéolos
-          </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-xl text-white/80 max-w-2xl mx-auto font-light"
-          >
-            A liberdade de acampar ao ar livre com toda a estrutura e sombra que merece.
-          </motion.p>
+        <div className="absolute inset-0 bg-gradient-to-t from-principal/90 via-principal/50 to-black/45" />
+
+        <div className="relative z-10 max-w-6xl mx-auto w-full text-white">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-secundaria mb-3 sm:mb-4">
+            Cerca de 350 Alvéolos · Ligação Elétrica 16A · WIFI Grátis
+          </p>
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-serif leading-[1.08] max-w-3xl [text-wrap:balance] mb-4 sm:mb-6">
+            Alvéolos Individuais na Natureza
+          </h1>
+          <p className="text-base sm:text-lg text-white/85 max-w-2xl font-light leading-relaxed mb-8 sm:mb-10">
+            Espaços individuais, perfeitamente identificados com ligação elétrica, num total de cerca
+            de 350 alvéolos para tendas, caravanas e autocaravanas.
+          </p>
+          <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3 sm:gap-4">
+            <Link
+              to="/reservar?tipo=alveolos"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-secundaria text-principal min-h-[48px] px-8 py-4 rounded-full font-bold text-xs uppercase tracking-[0.18em] hover:bg-white transition-colors whitespace-nowrap"
+            >
+              Reservar Alvéolo
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+            <a
+              href="#tarifario"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 border border-white/35 text-white min-h-[48px] px-8 py-4 rounded-full font-bold text-xs uppercase tracking-[0.18em] hover:bg-white hover:text-principal transition-colors whitespace-nowrap"
+            >
+              Ver Tarifas 2026/27
+            </a>
+          </div>
         </div>
       </section>
 
-      <div className="max-w-6xl mx-auto px-6 py-24">
-        {/* Intro Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center mb-32">
-          <motion.div {...fadeInUp}>
-            <h2 className="text-4xl font-serif text-principal mb-8 leading-tight">O seu espaço de liberdade na natureza</h2>
-            <p className="text-texto-main/70 leading-relaxed text-lg font-light mb-6">
-              Os nossos alvéolos são desenhados para oferecer a máxima flexibilidade. Seja com uma tenda clássica, uma autocaravana moderna ou uma mobile home, encontrará o terreno ideal para a sua estadia.
-            </p>
-            <div className="space-y-4">
-              <div className="flex items-center gap-3 text-texto-main/80 font-medium">
-                <div className="w-2 h-2 bg-secundaria rounded-full" />
-                80 Alvéolos disponíveis
-              </div>
-              <div className="flex items-center gap-3 text-texto-main/80 font-medium">
-                <div className="w-2 h-2 bg-secundaria rounded-full" />
-                Organizados em 8 ruas temáticas
-              </div>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 md:py-24 space-y-16 md:space-y-24">
+        {/* 01. Tipologias Interativas */}
+        <motion.section {...fadeInUp} className="space-y-8 sm:space-y-10">
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-6 sm:pb-8 border-b border-principal/10">
+            <div className="space-y-3 max-w-2xl">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-principal/50">
+                01. Tipologias Disponíveis
+              </p>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif text-principal leading-tight [text-wrap:balance]">
+                Escolha o tamanho ideal para o seu equipamento
+              </h2>
             </div>
-          </motion.div>
-          <motion.div {...fadeInUp} className="relative">
-            <div className="absolute -inset-4 bg-secundaria/5 rounded-[2rem] rotate-2 -z-10" />
-            <img 
-              src="/assets/entrada.jpg" 
-              alt="Área de Camping" 
-              className="rounded-3xl shadow-2xl aspect-video object-cover"
-            />
-          </motion.div>
-        </div>
 
-        {/* Highlights Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-32">
-          {highlights.map((item, i) => (
-            <motion.div 
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="bg-white p-8 rounded-3xl shadow-xl border border-gray-50 group hover:border-secundaria/30 transition-all duration-500"
-            >
-              <div className="w-12 h-12 bg-principal text-white rounded-2xl flex items-center justify-center mb-6 group-hover:bg-secundaria group-hover:text-principal transition-colors duration-500">
-                {item.icon}
-              </div>
-              <h4 className="text-xl font-serif font-bold text-principal mb-3">{item.title}</h4>
-              <p className="text-texto-main/60 text-sm font-light leading-relaxed">{item.text}</p>
-            </motion.div>
-          ))}
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            className="bg-principal p-8 rounded-3xl shadow-xl text-white flex flex-col justify-center border border-white/10"
-          >
-            <h4 className="text-xl font-serif font-bold text-secundaria mb-3">Dica de Verão</h4>
-            <p className="text-white/60 text-sm font-light leading-relaxed">
-              Os nossos alvéolos são muito requisitados entre Junho e Setembro. Recomendamos a reserva antecipada para garantir o seu lugar à sombra.
-            </p>
-          </motion.div>
-        </div>
-
-        {/* Logistics & Info */}
-        <motion.div {...fadeInUp} className="bg-white rounded-[2.5rem] p-12 shadow-2xl border border-gray-100 mb-32">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            <div className="lg:col-span-2">
-              <h3 className="text-2xl font-serif text-principal mb-8 flex items-center gap-3">
-                <Info className="w-6 h-6 text-secundaria" />
-                Informações Importantes
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
-                {[
-                  'Check-in e Check-out flexíveis (consultar receção)',
-                  'Acesso livre aos blocos sanitários modernos',
-                  'Pontos de água potável em todo o parque',
-                  'Eletricidade disponível em todos os alvéolos',
-                  'Zona de lavandaria e máquinas de lavar',
-                  'Área de churrasco comum',
-                ].map((text, i) => (
-                  <div key={i} className="flex gap-3 text-sm text-texto-main/70 font-light">
-                    <Check className="w-4 h-4 text-secundaria shrink-0 mt-0.5" />
-                    {text}
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="bg-branco-quente p-8 rounded-2xl flex flex-col justify-center text-center border border-gray-100">
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-principal/40 mb-2">Conectividade</p>
-              <h4 className="text-2xl font-serif text-principal mb-4 italic">WIFI Grátis</h4>
-              <p className="text-xs text-texto-main/50 font-light">Disponível em toda a área dos alvéolos e espaços comuns.</p>
+            <div className="flex flex-wrap sm:inline-flex w-full sm:w-auto gap-1.5 p-1.5 bg-white rounded-2xl border border-principal/10 shrink-0">
+              {(['pequeno', 'grande', 'xl'] as const).map((tierKey) => (
+                <button
+                  key={tierKey}
+                  type="button"
+                  onClick={() => setSelectedTier(tierKey)}
+                  className={`flex-1 sm:flex-initial min-h-[44px] px-3 sm:px-5 py-2.5 rounded-xl text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                    selectedTier === tierKey
+                      ? 'bg-principal text-white'
+                      : 'text-principal/65 hover:text-principal'
+                  }`}
+                >
+                  {PLOT_TIERS[tierKey].title}
+                </button>
+              ))}
             </div>
           </div>
-        </motion.div>
 
-        {/* Pricing Tables Integration */}
-        <motion.div {...fadeInUp} className="relative">
-          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-secundaria/20 to-transparent mb-12" />
+          <div className="bg-white rounded-3xl md:rounded-[2.5rem] p-6 sm:p-8 md:p-12 border border-principal/10 grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-10 items-stretch">
+            <div className="lg:col-span-7 flex flex-col justify-between space-y-6">
+              <div className="space-y-4">
+                <div className="flex flex-wrap items-center gap-3 text-xs font-semibold text-principal/55">
+                  <span>{activeTier.area}</span>
+                  <span aria-hidden="true">·</span>
+                  <span>{activeTier.totalCount}</span>
+                </div>
+                <h3 className="text-2xl sm:text-3xl font-serif font-bold text-principal">{activeTier.title}</h3>
+                <p className="text-sm sm:text-base text-texto-main/75 font-light leading-relaxed">
+                  {activeTier.idealFor}
+                </p>
+              </div>
+
+              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 pt-4 border-t border-principal/10">
+                {activeTier.highlights.map((item) => (
+                  <li key={item} className="flex items-start gap-2.5 text-sm text-texto-main/75 font-light">
+                    <Check className="w-4 h-4 text-secundaria shrink-0 mt-0.5" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="pt-2">
+                <Link
+                  to="/reservar?tipo=alveolos"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-principal text-white min-h-[48px] px-6 sm:px-8 py-4 rounded-full font-bold text-xs uppercase tracking-[0.14em] sm:tracking-[0.18em] hover:bg-secundaria hover:text-principal transition-colors"
+                >
+                  <span>Verificar Disponibilidade</span>
+                  <ArrowRight className="w-4 h-4 shrink-0" />
+                </Link>
+              </div>
+            </div>
+
+            <div className="lg:col-span-5 bg-branco-quente rounded-2xl sm:rounded-3xl p-5 sm:p-7 md:p-8 flex flex-col justify-between space-y-6">
+              <div className="space-y-4">
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-principal/50">
+                  Tarifa Base por Noite (Alvéolo)
+                </p>
+                <div className="divide-y divide-principal/10">
+                  {activeTier.rates.map((r) => (
+                    <div
+                      key={r.label}
+                      className="py-3.5 flex items-center justify-between gap-4 text-sm"
+                    >
+                      <span className="text-texto-main/75 font-light">{r.label}</span>
+                      <span className="font-serif font-bold text-principal tabular-nums whitespace-nowrap">
+                        {r.price}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <p className="text-xs text-texto-main/55 font-light leading-relaxed">
+                Valores por noite para a parcela. Acresce tarifa por adulto, criança, animal ou
+                eletricidade (16A), conforme tabela geral abaixo.
+              </p>
+            </div>
+          </div>
+        </motion.section>
+
+        {/* 02. Estrutura e Comodidades */}
+        <motion.section {...fadeInUp} className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-stretch">
+          <div className="lg:col-span-6 rounded-3xl overflow-hidden shadow-xl min-h-[340px]">
+            <img
+              src="/assets/entrada.jpg"
+              alt="Parcelas individuais sombreadas no Camping Ria Formosa"
+              className="w-full h-full object-cover"
+            />
+          </div>
+
+          <div className="lg:col-span-6 flex flex-col justify-center space-y-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-principal/50">
+              02. Infraestrutura dos ~350 Alvéolos
+            </p>
+            <h2 className="text-3xl md:text-4xl font-serif text-principal leading-tight [text-wrap:balance]">
+              Liberdade ao ar livre com apoio completo
+            </h2>
+            <p className="text-base text-texto-main/75 font-light leading-relaxed">
+              Cada alvéolo encontra-se demarcado, identificado por número e setor, garantindo
+              organização, privacidade e acesso simples tanto para tendas como para autocaravanas.
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-2">
+              {[
+                {
+                  icon: Ruler,
+                  title: 'Dimensões Versáteis',
+                  text: 'Desde 5m × 5m (25 m²) até parcelas XL acima de 90 m².',
+                },
+                {
+                  icon: Zap,
+                  title: 'Ligação Elétrica 16A',
+                  text: 'Pontos de luz disponíveis em todo o parque mediante taxa diária.',
+                },
+                {
+                  icon: TreePine,
+                  title: 'Sombra Natural',
+                  text: 'Cobertura arborizada por cerca de 500 árvores e toldos.',
+                },
+                {
+                  icon: Droplets,
+                  title: 'Água e Sanitários Solares',
+                  text: 'Pontos de água potável e 2 blocos sanitários com água quente solar.',
+                },
+                {
+                  icon: Wifi,
+                  title: 'WIFI Grátis',
+                  text: 'Cobertura em toda a área de alvéolos e zonas comuns.',
+                },
+                {
+                  icon: Map,
+                  title: 'Organização por Setores',
+                  text: 'Setor Norte, Sul e Nascente com reserva imediata por unidade.',
+                },
+              ].map((spec) => {
+                const Icon = spec.icon;
+                return (
+                  <div key={spec.title} className="flex items-start gap-3.5">
+                    <div className="w-9 h-9 rounded-xl bg-white border border-principal/10 text-principal flex items-center justify-center shrink-0 mt-0.5">
+                      <Icon className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-bold text-principal">{spec.title}</h3>
+                      <p className="text-xs text-texto-main/65 font-light leading-relaxed mt-0.5">
+                        {spec.text}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="p-5 rounded-2xl bg-white border border-principal/10 flex items-start gap-3 text-xs text-texto-main/70 leading-relaxed">
+              <Info className="w-4 h-4 text-secundaria shrink-0 mt-0.5" />
+              <span>
+                <strong>Dica de Verão:</strong> Entre junho e setembro a procura aumenta bastante;
+                recomendamos reservar antecipadamente para garantir disponibilidade no setor desejado.
+              </span>
+            </div>
+          </div>
+        </motion.section>
+
+        {/* 03. Tarifário Oficial */}
+        <section id="tarifario" className="scroll-mt-24 rounded-3xl md:rounded-[2.5rem] overflow-hidden border border-principal/10">
           <PriceTables />
-        </motion.div>
+        </section>
 
-        {/* CTA */}
-        <motion.div {...fadeInUp} className="mt-24 text-center">
-          <Link to="/contactos" className="inline-block bg-principal text-white px-16 py-6 rounded-full font-bold uppercase tracking-widest text-sm shadow-2xl hover:bg-secundaria hover:text-principal transition-all duration-500 transform hover:scale-105">
-            Solicitar Reserva de Alvéolo
+        {/* Final CTA */}
+        <motion.section
+          {...fadeInUp}
+          className="bg-principal text-white rounded-3xl md:rounded-[2.5rem] p-7 sm:p-10 md:p-14 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 lg:gap-8"
+        >
+          <div className="space-y-2 max-w-xl">
+            <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-secundaria">
+              <Tent className="w-4 h-4" />
+              Reserva Direta no Site
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-serif leading-tight">
+              Pronto para escolher o seu alvéolo?
+            </h2>
+            <p className="text-sm text-white/75 font-light">
+              Consulte as unidades livres em tempo real e confirme a sua estadia de imediato.
+            </p>
+          </div>
+          <Link
+            to="/reservar?tipo=alveolos"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-secundaria text-principal min-h-[48px] px-8 sm:px-9 py-4 rounded-full font-bold text-xs uppercase tracking-[0.18em] hover:bg-white transition-colors whitespace-nowrap shrink-0"
+          >
+            Reservar Alvéolo
+            <ArrowRight className="w-4 h-4" />
           </Link>
-        </motion.div>
+        </motion.section>
       </div>
     </motion.div>
   );

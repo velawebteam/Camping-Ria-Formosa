@@ -1,135 +1,291 @@
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
+import { ArrowRight, ExternalLink, Check, Tent, Home, Sparkles, Compass } from 'lucide-react';
 
 const fadeInUp = {
-  initial: { opacity: 0, y: 40 },
+  initial: { opacity: 0, y: 28 },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true },
-  transition: { duration: 0.8 }
+  viewport: { once: true, margin: '-80px' },
+  transition: { duration: 0.7 },
 };
 
-const staggerContainer = {
-  initial: {},
-  whileInView: {
-    transition: {
-      staggerChildren: 0.1
-    }
-  }
-};
+const KAMPAOH_URL =
+  'https://booking.kampaoh.com/property/141?lang=pt&checkin=2026-11-17&checkout=2026-11-19&adults=2&children=0&babies=0&fpa=none';
+
+interface AlojamentoItem {
+  id: string;
+  index: string;
+  title: string;
+  subtitle: string;
+  desc: string;
+  capacidade: string;
+  regime: string;
+  img: string;
+  comodidades: string[];
+  primaryLabel: string;
+  primaryTo?: string;
+  externalHref?: string;
+  secondaryReserveTo?: string;
+}
 
 export default function AlojamentosPage() {
-  const alojamentos = [
+  const alojamentos: AlojamentoItem[] = [
     {
+      id: 'alveolos',
+      index: '01',
       title: 'Alvéolos',
-      desc: 'Espaços de arrendamento livre onde podem ser colocadas tendas, carros, autocaravanas, mobile homes, etc.',
-      capacidade: 'Variável',
+      subtitle: 'Tendas · Caravanas · Autocaravanas',
+      desc: 'Espaços individuais de arrendamento livre, perfeitamente identificados com ligação elétrica, num número total de cerca de 350 alvéolos inseridos entre 500 árvores de sombra natural.',
+      capacidade: '3 tipologias (Pequeno, Grande e XL)',
+      regime: 'Reserva online imediata',
       img: '/assets/entrada.jpg',
-      comodidades: ['Alvéolos sombreados', 'Eletricidade disponível', 'Acesso aos blocos sanitários', 'Zona de grelhadores']
+      comodidades: [
+        'Cerca de 350 alvéolos individuais',
+        'Ligação elétrica 16A disponível',
+        'Sombra natural e zonas arborizadas',
+        'Acesso a 2 blocos sanitários modernos',
+      ],
+      primaryLabel: 'Ver Disponibilidade',
+      primaryTo: '/alojamentos/alveolos',
+      secondaryReserveTo: '/reservar?tipo=alveolos',
     },
     {
+      id: 'bungalows',
+      index: '02',
       title: 'Bungalows',
-      desc: '5 bungalows T2 totalmente equipados, ideais para famílias ou pequenos grupos.',
+      subtitle: 'Classe A (até 5 pax) · Classe B (até 4 pax)',
+      desc: '5 bungalows T2 totalmente equipados, desenhados para famílias ou pequenos grupos que procuram a privacidade de uma casa no meio da natureza com ar condicionado e piscina incluída.',
       capacidade: '4 a 5 pessoas',
+      regime: 'Reserva online imediata',
       img: '/assets/aistudio/bungalows.jpg',
-      comodidades: ['2 quartos', 'Cozinha equipada', 'Casa de banho privativa', 'Terraço privado']
+      comodidades: [
+        '2 quartos independentes com roupa de cama',
+        'Kitchenette completa e TV satélite',
+        'Ar condicionado e casa de banho privativa',
+        'Alpendre exterior e parqueamento incluído',
+      ],
+      primaryLabel: 'Ver Disponibilidade',
+      primaryTo: '/alojamentos/bungalows',
+      secondaryReserveTo: '/reservar?tipo=bungalows',
     },
     {
+      id: 'kampaoh',
+      index: '03',
       title: 'Kampaoh',
-      desc: 'Tendas pré-montadas de alta qualidade pela Kampaoh, para uma experiência de campismo sem preocupações.',
-      capacidade: 'Variável',
+      subtitle: 'Glamping em parceria oficial Kampaoh',
+      desc: 'Tendas pré-montadas e decoradas com camas, têxteis e equipamento completo pela Kampaoh, para viver o campismo sem preocupações desde o primeiro minuto.',
+      capacidade: 'Conforme tipologia Kampaoh',
+      regime: 'Gestão e reserva via parceiro Kampaoh',
       img: '/assets/quartos bungalows.jpg',
-      comodidades: ['Tendas equipadas', 'Design exclusivo', 'Conforto superior', 'Serviço Kampaoh']
-    }
+      comodidades: [
+        'Tendas prontas à chegada',
+        'Camas confortáveis e iluminação',
+        'Design exclusivo ao ar livre',
+        'Acesso às piscinas e serviços do parque',
+      ],
+      primaryLabel: 'Reservar na Kampaoh',
+      externalHref: KAMPAOH_URL,
+    },
+    {
+      id: 'mobile-homes',
+      index: '04',
+      title: 'Mobile Homes',
+      subtitle: 'Zona reservada · Lotes de 100 m² a 250 m²',
+      desc: 'Lotes amplos e infraestruturados para proprietários instalarem a sua própria casa de férias móvel numa área tranquila e reservada do parque.',
+      capacidade: 'Lotes privados de 100 m² a 250 m²',
+      regime: 'Instalação própria (não disponível para aluguer)',
+      img: '/assets/mobile-home1.jpg',
+      comodidades: [
+        'Ligações individuais de água e esgoto',
+        'Ponto de energia elétrica dedicado',
+        'Zona exclusiva e reservada',
+        'Traga e instale a sua própria mobile home',
+      ],
+      primaryLabel: 'Ver Disponibilidade',
+      primaryTo: '/alojamentos/mobile-homes',
+    },
   ];
 
+  const scrollToSection = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
-      className="pt-40 pb-32 px-6 bg-branco-quente min-h-screen"
+      transition={{ duration: 0.4 }}
+      className="pt-28 sm:pt-32 lg:pt-36 pb-20 md:pb-28 px-4 sm:px-6 bg-branco-quente min-h-screen"
     >
       <div className="max-w-6xl mx-auto">
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }}
+        {/* Editorial Page Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          className="text-center mb-20"
+          transition={{ duration: 0.6 }}
+          className="pb-10 lg:pb-12 border-b border-principal/10 mb-10 md:mb-14"
         >
-          <motion.h1 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="text-4xl md:text-6xl font-serif mb-6 text-principal"
-          >
-            OS NOSSOS ALOJAMENTOS
-          </motion.h1>
-          <p className="text-xl text-texto-main/60 max-w-2xl mx-auto font-light">Escolha a opção que melhor se adapta ao seu estilo de férias e desfrute do Algarve.</p>
-        </motion.div>
-        
-        <div className="space-y-32">
-          {alojamentos.map((alojamento, i) => (
-            <motion.div 
-              key={i} 
-              initial={{ opacity: 0, y: 60 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 1 }}
-              className={`grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24 items-center ${i % 2 !== 0 ? 'md:flex-row-reverse' : ''}`}
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 lg:gap-8">
+            <div className="space-y-3 sm:space-y-4 max-w-2xl">
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-principal/55">
+                Camping Ria Formosa · 56.000 m² de Natureza
+              </p>
+              <h1 className="text-3xl sm:text-4xl md:text-6xl font-serif text-principal leading-[1.08] [text-wrap:balance]">
+                Os Nossos Alojamentos
+              </h1>
+              <p className="text-base md:text-lg text-texto-main/70 font-light leading-relaxed">
+                Da liberdade de acampar sob 500 árvores ao conforto equipado dos nossos bungalows T2,
+                escolha o espaço ideal para as suas férias em Cabanas de Tavira.
+              </p>
+            </div>
+
+            <Link
+              to="/reservar"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-secundaria text-principal min-h-[48px] px-8 py-4 rounded-full font-bold text-xs uppercase tracking-[0.18em] hover:bg-principal hover:text-white transition-colors whitespace-nowrap shrink-0 self-start lg:self-auto"
             >
-              <div className={`relative group ${i % 2 !== 0 ? 'md:order-2' : ''}`}>
-                <div className="absolute -inset-4 bg-secundaria/5 rounded-[2.5rem] rotate-2 group-hover:rotate-0 transition-transform duration-700 -z-10" />
-                <div className="overflow-hidden rounded-3xl shadow-2xl">
-                  <motion.img 
-                    whileHover={{ scale: 1.05 }}
-                    transition={{ duration: 1 }}
-                    src={alojamento.img} 
-                    alt={alojamento.title} 
-                    className="w-full h-[500px] object-cover" 
-                  />
+              Reservar Estadia
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+
+          {/* Quick Jump Index Bar */}
+          <div className="mt-8 sm:mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            {[
+              { id: 'alveolos', label: 'Alvéolos', meta: '~350 espaços · Reserva online', icon: Tent },
+              { id: 'bungalows', label: 'Bungalows', meta: '5 unidades T2 · Reserva online', icon: Home },
+              { id: 'kampaoh', label: 'Kampaoh', meta: 'Glamping parceiro oficial', icon: Sparkles },
+              { id: 'mobile-homes', label: 'Mobile Homes', meta: 'Lotes 100–250 m² · Instalação', icon: Compass },
+            ].map((nav) => {
+              const Icon = nav.icon;
+              return (
+                <button
+                  key={nav.id}
+                  type="button"
+                  onClick={() => scrollToSection(nav.id)}
+                  className="bg-white p-4 sm:p-5 rounded-2xl border border-principal/10 hover:border-secundaria text-left transition-all flex items-center sm:items-start gap-4 cursor-pointer group min-h-[56px]"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-branco-quente text-principal flex items-center justify-center shrink-0 group-hover:bg-secundaria transition-colors">
+                    <Icon className="w-4 h-4" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="font-serif font-bold text-principal text-base">{nav.label}</p>
+                    <p className="text-xs text-texto-main/55 truncate mt-0.5">{nav.meta}</p>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </motion.div>
+
+        {/* Accommodation Showcases */}
+        <div className="space-y-12 md:space-y-20">
+          {alojamentos.map((alojamento, i) => (
+            <motion.section
+              key={alojamento.id}
+              id={alojamento.id}
+              {...fadeInUp}
+              className="scroll-mt-24 bg-white rounded-3xl md:rounded-[2.5rem] p-5 sm:p-6 md:p-10 border border-principal/10 grid grid-cols-1 lg:grid-cols-12 gap-7 md:gap-10 items-stretch"
+            >
+              {/* Image Side */}
+              <div
+                className={`lg:col-span-6 overflow-hidden rounded-2xl md:rounded-3xl min-h-[240px] sm:min-h-[320px] lg:min-h-[430px] relative group ${
+                  i % 2 !== 0 ? 'lg:order-2' : ''
+                }`}
+              >
+                <img
+                  src={alojamento.img}
+                  alt={alojamento.title}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+              </div>
+
+              {/* Content Side */}
+              <div
+                className={`lg:col-span-6 flex flex-col justify-between py-1 sm:py-2 ${
+                  i % 2 !== 0 ? 'lg:order-1' : ''
+                }`}
+              >
+                <div className="space-y-6">
+                  <div className="flex flex-wrap items-center gap-3 text-xs font-semibold text-principal/55">
+                    <span className="tabular-nums text-principal font-bold">{alojamento.index}.</span>
+                    <span aria-hidden="true">·</span>
+                    <span>{alojamento.subtitle}</span>
+                  </div>
+
+                  <div>
+                    <h2 className="text-3xl md:text-5xl font-serif font-bold text-principal leading-tight">
+                      {alojamento.title}
+                    </h2>
+                    <p className="mt-4 text-base text-texto-main/75 leading-relaxed font-light">
+                      {alojamento.desc}
+                    </p>
+                  </div>
+
+                  {/* Specs Summary */}
+                  <div className="py-5 border-y border-principal/10 grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                    <div>
+                      <p className="uppercase tracking-[0.16em] text-principal/45 font-bold mb-1">
+                        Capacidade
+                      </p>
+                      <p className="text-principal font-semibold text-sm">{alojamento.capacidade}</p>
+                    </div>
+                    <div>
+                      <p className="uppercase tracking-[0.16em] text-principal/45 font-bold mb-1">
+                        Regime
+                      </p>
+                      <p className="text-principal font-semibold text-sm">{alojamento.regime}</p>
+                    </div>
+                  </div>
+
+                  {/* Checklist */}
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
+                    {alojamento.comodidades.map((item) => (
+                      <li
+                        key={item}
+                        className="flex items-start gap-2.5 text-sm text-texto-main/75 font-light"
+                      >
+                        <Check className="w-4 h-4 text-secundaria shrink-0 mt-0.5" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Actions */}
+                <div className="pt-7 sm:pt-8 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3 sm:gap-4">
+                  {alojamento.externalHref ? (
+                    <a
+                      href={alojamento.externalHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-3 bg-principal text-white min-h-[48px] px-8 sm:px-9 py-4 rounded-full font-bold hover:bg-secundaria hover:text-principal transition-colors uppercase tracking-[0.16em] text-xs whitespace-nowrap"
+                    >
+                      {alojamento.primaryLabel}
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                  ) : (
+                    <Link
+                      to={alojamento.primaryTo || '/alojamentos'}
+                      className="inline-flex items-center justify-center gap-3 bg-principal text-white min-h-[48px] px-8 sm:px-9 py-4 rounded-full font-bold hover:bg-secundaria hover:text-principal transition-colors uppercase tracking-[0.16em] text-xs whitespace-nowrap"
+                    >
+                      {alojamento.primaryLabel}
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  )}
+
+                  {alojamento.secondaryReserveTo && (
+                    <Link
+                      to={alojamento.secondaryReserveTo}
+                      className="inline-flex items-center justify-center gap-2 min-h-[48px] px-7 py-4 rounded-full border border-principal/20 text-principal font-bold hover:border-principal hover:bg-branco-quente transition-colors uppercase tracking-[0.16em] text-xs whitespace-nowrap"
+                    >
+                      Reservar Agora
+                    </Link>
+                  )}
                 </div>
               </div>
-              
-              <div className={i % 2 !== 0 ? 'md:order-1' : ''}>
-                <motion.div variants={staggerContainer} initial="initial" whileInView="whileInView" viewport={{ once: true }}>
-                  <motion.h2 variants={fadeInUp} className="text-3xl md:text-5xl font-serif font-bold mb-6 text-principal leading-tight">
-                    {alojamento.title}
-                  </motion.h2>
-                  <motion.p variants={fadeInUp} className="text-xl text-texto-main/70 mb-8 leading-relaxed font-light">
-                    {alojamento.desc}
-                  </motion.p>
-                  
-                  <motion.div 
-                    variants={fadeInUp}
-                    className="bg-white/50 backdrop-blur-sm p-8 rounded-2xl border border-gray-100 mb-10 shadow-sm"
-                  >
-                    <p className="font-bold text-principal mb-6 uppercase tracking-[0.2em] text-[10px]">Capacidade: {alojamento.capacidade}</p>
-                    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
-                      {alojamento.comodidades.map(c => (
-                        <motion.li 
-                          key={c} 
-                          initial={{ opacity: 0, x: -10 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          className="flex items-center gap-3 text-texto-main/70 text-sm font-light"
-                        >
-                          <div className="w-1.5 h-1.5 bg-secundaria rounded-full shrink-0" />
-                          {c}
-                        </motion.li>
-                      ))}
-                    </ul>
-                  </motion.div>
-                  
-                  <motion.button 
-                    variants={fadeInUp}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="bg-principal text-white px-12 py-5 rounded-full font-bold hover:bg-secundaria hover:text-principal transition-all duration-500 shadow-xl uppercase tracking-widest text-xs"
-                  >
-                    Ver Disponibilidade
-                  </motion.button>
-                </motion.div>
-              </div>
-            </motion.div>
+            </motion.section>
           ))}
         </div>
       </div>
