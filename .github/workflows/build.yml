@@ -14,15 +14,15 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Install Dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       - name: Build Project
         run: npm run build
@@ -35,15 +35,15 @@ jobs:
           rm -rf production-build
           mkdir production-build
 
-          cp -r dist/* production-build/
+          cp -r dist/. production-build/
 
           cd production-build
 
           git init
-          git checkout -b production
+          git checkout -B production
 
-          git add .
+          git add -A
           git commit -m "Deploy site"
 
-          git remote add origin https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git
+          git remote add origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
           git push --force origin production
